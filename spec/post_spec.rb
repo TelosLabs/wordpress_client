@@ -54,12 +54,18 @@ module WordpressClient
 
     it "parses author" do
       post = Post.parse(fixture)
-
-      expect(post.author).to eq [
-        Author.new(
-          id: 1, name: "test", slug: "test",
-        )
-      ]
+      urls = {
+        "24" => "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=24&d=mm&r=g",
+        "48" => "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=48&d=mm&r=g",
+        "96" => "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=96&d=mm&r=g"
+      }
+      pp post.author
+      new_author = Author.new(
+        id: 1, name: "test", description:'', slug: "test", avatar_urls: urls,
+      )
+      pp new_author
+      expect(post.author).to eq new_author
+      
 
     end
 
