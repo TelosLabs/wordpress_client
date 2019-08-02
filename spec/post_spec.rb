@@ -52,6 +52,17 @@ module WordpressClient
       expect(post.tag_ids).to eq [2]
     end
 
+    it "parses author" do
+      post = Post.parse(fixture)
+
+      expect(post.author).to eq [
+        Author.new(
+          id: 1, name: "test", slug: "test",
+        )
+      ]
+
+    end
+
     it "can have a Media as featured image" do
       media = instance_double(Media, id: 12)
       post = Post.new(featured_media: media)

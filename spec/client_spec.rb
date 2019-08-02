@@ -184,6 +184,37 @@ module WordpressClient
       end
     end
 
+    describe "finding authors" do
+      it "has working pagination" do
+        expect(connection).to receive(:get_multiple).with(
+          Author, "users", hash_including(page: 2, per_page: 13)
+        ).and_return []
+
+        expect(client.authors(per_page: 13, page: 2)).to eq []
+      end
+
+      it "embeds linked resources" do
+        expect(connection).to receive(:get_multiple).with(
+          Author, "users", hash_including(_embed: nil)
+        ).and_return []
+
+        expect(client.authors).to eq []
+      end
+    end
+
+    describe "fetching a single author" do
+      it "embeds linked resources" do
+        author = instance_double(Author)
+
+        expect(connection).to receive(:get).with(
+          Author, "users/5", _embed: nil
+        ).and_return author
+
+        expect(client.find_author(5)).to eq author
+      end
+
+    end
+
     describe "media" do
       it "can be uploaded from IO objects" do
         media = instance_double(Media)
