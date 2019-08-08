@@ -108,8 +108,10 @@ module WordpressClient
     # Find {Category Categories} in the Wordpress install.
     #
     # @return {PaginatedCollection[Category]}
-    def categories(per_page: 10, page: 1)
-      connection.get_multiple(Category, "categories", page: page, per_page: per_page)
+    def categories(params={})
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
+      connection.get_multiple(Category, "categories", params)
     end
 
     # Find {Category} with the given ID.
