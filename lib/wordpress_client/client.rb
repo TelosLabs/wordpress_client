@@ -161,8 +161,10 @@ module WordpressClient
     # Find {Tag Tags} in the Wordpress install.
     #
     # @return {PaginatedCollection[Tag]}
-    def tags(per_page: 10, page: 1)
-      connection.get_multiple(Tag, "tags", page: page, per_page: per_page)
+    def tags(params={})
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
+      connection.get_multiple(Tag, "tags", params)
     end
 
     # Find {Tag} with the given ID.
