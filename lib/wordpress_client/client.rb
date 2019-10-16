@@ -116,9 +116,10 @@ module WordpressClient
       params[:_embed] ||= nil
       params[:per_page] ||=  10
       params[:page] ||= 1 
+      params[:search] = search
       connection.get_multiple(
         Post,
-        "search?search=#{search}",
+        "search",
         params
       )
     end
