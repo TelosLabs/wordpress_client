@@ -4,12 +4,13 @@ require "json"
 module WordpressClient
   # @private
   class Connection
-    attr_reader :url, :username
+    attr_reader :url, :username, :namespace
 
-    def initialize(url:, username:, password:)
+    def initialize(url:, username:, password:, namespace: 'wp/v2')
       @url = url
       @username = username
       @password = password
+      @namespace = namespace
     end
 
     def get(model, path, params = {})
@@ -87,7 +88,7 @@ module WordpressClient
     end
 
     def setup_network_connection
-      Faraday.new(url: File.join(url, "wp/v2")) do |conn|
+      Faraday.new(url: url) do |conn|
         conn.request :basic_auth, username, @password
         conn.adapter :net_http
       end
@@ -108,7 +109,7 @@ module WordpressClient
     end
 
     def get_json_and_response(path, params = {})
-      response = net.get(path, params)
+      response = net.get(File.join(namespace, path), params)
       [parse_json_response(response), response]
     rescue Faraday::ConnectionFailed => error
       raise TimeoutError if error.cause.class == Net::OpenTimeout

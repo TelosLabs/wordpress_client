@@ -328,6 +328,12 @@ module WordpressClient
       "#<WordpressClient::Client #{connection.inspect}>"
     end
 
+    def related_posts(id)
+      params[:posts_per_page] ||=  10
+      params[:fields] ||=  "ids"
+      connection.get(RelatedPost, "posts/#{id.to_i}", params, "related-posts-by-taxonomy/v1")
+    end
+
     private
     attr_reader :connection
   end
