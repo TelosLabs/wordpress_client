@@ -5,8 +5,9 @@ module WordpressClient
   # @private
   class Connection
     attr_reader :url, :username, :namespace
+    attr_writer :namespace
 
-    def initialize(url:, username:, password:, namespace: 'wp/v2')
+    def initialize(url:, username:, password:)
       @url = url
       @username = username
       @password = password
