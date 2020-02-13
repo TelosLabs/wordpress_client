@@ -11,7 +11,6 @@ module WordpressClient
       @url = url
       @username = username
       @password = password
-      @namespace = namespace
     end
 
     def get(model, path, params = {})

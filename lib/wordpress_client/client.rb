@@ -1,6 +1,7 @@
 module WordpressClient
   class Client
     def initialize(connection)
+      connection.namespace = "wp/v2"
       @connection = connection
     end
 
