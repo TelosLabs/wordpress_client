@@ -1,7 +1,6 @@
 module WordpressClient
   class Client
     def initialize(connection)
-      connection.namespace = "wp/v2"
       @connection = connection
     end
 
@@ -330,12 +329,14 @@ module WordpressClient
     end
 
     def related_posts(id, params = {})
-      connection.namespace = "related-posts-by-taxonomy/v1"
       params[:posts_per_page] ||=  10
       params[:fields] ||=  "ids"
-      related_posts = connection.get(Plugins::RelatedPostsByTaxonomy::RelatedPost, "posts/#{id.to_i}", params)
-      connection.namespace = "wp/v2"
-      related_posts
+      connection.get(
+        Plugins::RelatedPostsByTaxonomy::RelatedPost, 
+        "posts/#{id.to_i}", 
+        params, 
+        "related-posts-by-taxonomy/v1"
+      )
     end
 
     private
