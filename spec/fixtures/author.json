@@ -1,0 +1,28 @@
+{
+  "id":23,
+  "name":"Test User",
+  "url":"http://2.gravatar.com/wp-json/wp/v2/users/23",
+  "description":"I am a happy person.",
+  "slug":"test",
+  "avatar_urls":{
+    "24": "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=24&d=mm&r=g",
+    "48": "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=48&d=mm&r=g",
+    "96": "http://2.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0?s=96&d=mm&r=g"
+  },
+  "meta":[
+
+  ],
+  "_links":{
+     "self":[
+        {
+           "href":"http://2.gravatar.com/wp-json/wp/v2/users/23"
+        }
+     ],
+     "collection":[
+        {
+           "href":"http://2.gravatar.com/wp-json/wp/v2/users"
+        }
+     ]
+  }
+}
+

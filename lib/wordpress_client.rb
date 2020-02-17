@@ -14,6 +14,9 @@ require "wordpress_client/post"
 require "wordpress_client/post_parser"
 require "wordpress_client/media"
 require "wordpress_client/media_parser"
+require "wordpress_client/user"
+require "wordpress_client/author"
+require "wordpress_client/plugins/related_posts_by_taxonomy/related_post"
 
 module WordpressClient
   # Initialize a new client using the provided connection details.

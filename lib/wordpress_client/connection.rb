@@ -12,18 +12,18 @@ module WordpressClient
       @password = password
     end
 
-    def get(model, path, params = {})
-      model.parse(get_json(path, params))
+    def get(model, path, params = {}, namespace='wp/v2')
+      model.parse(get_json(File.join(namespace, path), params))
     end
 
-    def get_multiple(model, path, params = {})
-      data, response = get_json_and_response(path, params)
+    def get_multiple(model, path, params = {}, namespace='wp/v2')
+      data, response = get_json_and_response(File.join(namespace, path), params)
       models = data.map { |model_data| model.parse(model_data) }
       wrap_paginated_collection(response, models, params)
     end
 
-    def create(model, path, attributes, redirect_params: {})
-      response = send_json(path, attributes)
+    def create(model, path, attributes, namespace='wp/v2', redirect_params: {})
+      response = send_json(File.join(namespace, path), attributes)
 
       if response.status == 201 # Created
         model.parse(get_json(response.headers.fetch("location"), redirect_params))
@@ -33,8 +33,8 @@ module WordpressClient
       end
     end
 
-    def create_without_response(path, attributes)
-      response = send_json(path, attributes)
+    def create_without_response(path, attributes, namespace='wp/v2')
+      response = send_json(File.join(namespace, path), attributes)
 
       if response.status == 201 # Created
         true
@@ -44,26 +44,26 @@ module WordpressClient
       end
     end
 
-    def delete(path, attributes = {})
-      response = send_json(path, attributes, method: :delete)
+    def delete(path, attributes = {}, namespace='wp/v2')
+      response = send_json(File.join(namespace, path), attributes, method: :delete)
       handle_status_code(response)
       true
     end
 
-    def put(model, path, attributes)
+    def put(model, path, attributes, namespace='wp/v2')
       model.parse(
-        parse_json_response(send_json(path, attributes, method: :put))
+        parse_json_response(send_json(File.join(namespace, path), attributes, method: :put))
       )
     end
 
-    def put_without_response(path, attributes)
-      handle_status_code(send_json(path, attributes, method: :put))
+    def put_without_response(path, attributes, namespace='wp/v2')
+      handle_status_code(send_json(File.join(namespace, path), attributes, method: :put))
       true
     end
 
-    def upload(model, path, io, mime_type:, filename:)
+    def upload(model, path, io, namespace='wp/v2', mime_type:, filename:)
       body = io.read
-      response = post_data(path, body, {
+      response = post_data(File.join(namespace, path), body, {
         "Content-Length" => body.size.to_s,
         "Content-Type" => mime_type,
         "Content-Disposition" => 'attachment; filename="' + (filename || "unnamed") + '"',
@@ -87,7 +87,7 @@ module WordpressClient
     end
 
     def setup_network_connection
-      Faraday.new(url: File.join(url, "wp/v2")) do |conn|
+      Faraday.new(url: url) do |conn|
         conn.request :basic_auth, username, @password
         conn.adapter :net_http
       end

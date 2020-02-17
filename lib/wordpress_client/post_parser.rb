@@ -20,6 +20,7 @@ module WordpressClient
       assign_categories(post)
       assign_tags(post)
       assign_featured_media(post)
+      assign_author(post)
       post
     end
 
@@ -70,6 +71,11 @@ module WordpressClient
           post.featured_media = Media.parse(media)
         end
       end
+    end
+
+    def assign_author(post)
+      author_data = embedded["author"].first
+      post.author = Author.parse(author_data)
     end
 
     def embedded_terms(type)
