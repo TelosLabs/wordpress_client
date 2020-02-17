@@ -10,7 +10,8 @@ module WordpressClient
       :title_html, :excerpt_html, :content_html,
       :updated_at, :date,
       :categories, :tags, :meta, :featured_media,
-      :tag_ids, :category_ids, :featured_media_id
+      :tag_ids, :category_ids, :featured_media_id,
+      :author
     )
 
     # @!attribute [rw] title_html
@@ -57,6 +58,10 @@ module WordpressClient
     #   @see Category
     #   @see Client#update_post
 
+    # @!attribute [rw] author
+    #   @return [Author] the {Author} the post belongs to.
+    #   @see Author
+    
     # @api private
     def self.parse(data)
       PostParser.parse(data)
@@ -79,7 +84,8 @@ module WordpressClient
       category_ids: [],
       tag_ids: [],
       featured_media: nil,
-      meta: {}
+      meta: {},
+      author: nil
     )
       @id = id
       @slug = slug
@@ -97,6 +103,7 @@ module WordpressClient
       @tag_ids = tag_ids
       @featured_media = featured_media
       @meta = meta
+      @author = author
     end
 
     # Returns the featured media, if the featured media is an image.

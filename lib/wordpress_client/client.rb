@@ -15,13 +15,14 @@ module WordpressClient
     # @param per_page [Fixnum] Posts per page. Defaults to 10.
     #
     # @return {PaginatedCollection[Post]} Paginated collection of the found posts.
-    def posts(per_page: 10, page: 1)
+    def posts(params = {})
+      params[:_embed] ||= nil
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
       connection.get_multiple(
         Post,
         "posts",
-        per_page: per_page,
-        page: page,
-        _embed: nil,
+        params
       )
     end
 
@@ -107,8 +108,10 @@ module WordpressClient
     # Find {Category Categories} in the Wordpress install.
     #
     # @return {PaginatedCollection[Category]}
-    def categories(per_page: 10, page: 1)
-      connection.get_multiple(Category, "categories", page: page, per_page: per_page)
+    def categories(params={})
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
+      connection.get_multiple(Category, "categories", params)
     end
 
     # Find {Category} with the given ID.
@@ -158,8 +161,10 @@ module WordpressClient
     # Find {Tag Tags} in the Wordpress install.
     #
     # @return {PaginatedCollection[Tag]}
-    def tags(per_page: 10, page: 1)
-      connection.get_multiple(Tag, "tags", page: page, per_page: per_page)
+    def tags(params={})
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
+      connection.get_multiple(Tag, "tags", params)
     end
 
     # Find {Tag} with the given ID.
@@ -245,6 +250,37 @@ module WordpressClient
     def upload(io, mime_type:, filename:)
       connection.upload(Media, "media", io, mime_type: mime_type, filename: filename)
     end
+
+    # @!group Author
+
+    # Find {Author Authors} matching given parameters.
+    #
+    # @example Finding 5 authors
+    #   authors = client.authors(per_page: 5)
+    #
+    # @param params for que API call
+    #
+    # @return {PaginatedCollection[Post]} Paginated collection of the found posts.
+    def authors(params = {})
+      params[:_embed] ||= nil
+      params[:per_page] ||=  10
+      params[:page] ||= 1 
+      connection.get_multiple(
+        Author,
+        "users",
+        params
+      )
+    end
+
+    # Find the {Author} with the given ID, or raises an error if not found.
+    #
+    # @return {Author}
+    # @raise {NotFoundError}
+    # @raise {subclasses of Error} on other unexpected errors
+    def find_author(id)
+      connection.get(Author, "users/#{id.to_i}", _embed: nil)
+    end
+
 
     # Create a new {Media} by uploading a file from disk.
     #
